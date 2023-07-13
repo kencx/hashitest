@@ -2,3 +2,6 @@
 *.tfvars
 *.tfstate*
 
+vault/{data,logs}/*
+unseal_key
+root_token

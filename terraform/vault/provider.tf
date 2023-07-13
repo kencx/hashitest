@@ -10,5 +10,4 @@ terraform {
 provider "vault" {
   address = var.vault_address
   token   = var.vault_token
-  # ca_cert_file = var.vault_ca_cert_file
 }

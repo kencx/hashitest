@@ -10,6 +10,18 @@ variable "vault_token" {
   description = "Vault token for provider"
 }
 
+variable "admin_password" {
+  type        = string
+  sensitive   = true
+  description = "Admin password"
+}
+
+variable "kvuser_password" {
+  type        = string
+  sensitive   = true
+  description = "kvuser password"
+}
+
 variable "allowed_auth_domains" {
   type        = list(string)
   description = "List of allowed_domains for PKI auth role"
