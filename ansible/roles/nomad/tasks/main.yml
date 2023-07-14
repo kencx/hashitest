@@ -1,0 +1,55 @@
+---
+- name: Create Nomad directories
+  file:
+    path: "{{ item }}"
+    mode: 0755
+    owner: nomad
+    group: nomad
+    state: directory
+  with_items:
+    - "{{ nomad_config_dir }}"
+    - "{{ nomad_data_dir }}"
+
+- name: Install CNI plugins
+  import_tasks: cni_plugins.yml
+
+- name: Setup Vault integration
+  import_tasks: vault_integration.yml
+  when: setup_vault_integration | bool
+
+- name: Copy service file
+  template:
+    src: "nomad.service.j2"
+    dest: "/etc/systemd/system/nomad.service"
+    mode: 0644
+    owner: root
+    group: root
+  notify:
+    - restart nomad
+
+- name: Copy Nomad config files
+  template:
+    src: "nomad.hcl.j2"
+    dest: "{{ nomad_config_dir }}/nomad.hcl"
+    mode: 0644
+    owner: nomad
+    group: nomad
+  notify:
+    - reload nomad
+
+- name: Start Nomad
+  systemd:
+    name: nomad
+    state: started
+    enabled: true
+    daemon_reload: true
+  register: nomad_started
+
+# Apply all service and config changes
+- name: Restart Nomad if there are changes
+  meta: flush_handlers
+
+- name: Wait for Nomad port
+  wait_for:
+    port: 4646
+    state: started

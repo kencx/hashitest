@@ -1,0 +1,93 @@
+---
+- name: Copy Vault service file
+  template:
+    src: "vault.service.j2"
+    dest: "/etc/systemd/system/vault.service"
+    mode: 0644
+    owner: root
+    group: root
+  notify:
+    - reload vault
+
+- name: Copy Vault config files
+  template:
+    src: "vault.hcl.j2"
+    dest: "{{ vault_config_dir }}/vault.hcl"
+    mode: 0644
+    owner: vault
+    group: vault
+  notify:
+    - reload vault
+
+- name: Start Vault
+  systemd:
+    name: vault
+    state: started
+    enabled: true
+  register: vault_started
+
+- name: Wait for Vault port
+  wait_for:
+    host: "{{ vault_server_fqdn }}"
+    port: 8200
+    state: started
+
+- name: Check Vault status
+  command: vault status -format=json
+  environment:
+    VAULT_ADDR: "http://{{ vault_server_fqdn }}:8200"
+  register: vault_status_raw
+  changed_when: false
+  failed_when: vault_status_raw.rc == 1
+
+- set_fact:
+    vault_status_json: "{{ vault_status_raw.stdout | from_json }}"
+
+- fail:
+    msg: Vault not initialized
+  when:
+    - vault_status_json is defined
+    - not vault_status_json.initialized
+
+# See terraform/vault for resources
+# Note that Terraform must be installed on Ansible host
+- set_fact:
+    vault_terraform_dir: "{{ lookup('pipe', 'git rev-parse --show-toplevel') }}/terraform/vault"
+
+# Clear any existing state from previous Vault server or Molecule testing. THIS CAN
+# DELETE IMPORTANT DATA! Take care when running tests when a state file already exists.
+
+- name: Delete existing state from Terraform if any
+  become: false
+  community.general.terraform:
+    project_path: "{{ vault_terraform_dir }}"
+    workspace: "{{ vault_terraform_workspace }}"
+    state: absent
+    variables:
+      vault_token: "{{ vault_root_token }}"
+      # Vagrant must port forward 8200 to the host
+      vault_address: "http://localhost:8200"
+  delegate_to: localhost
+  when: vault_terraform_reset | bool
+
+- name: Provision Vault secrets with Terraform provider
+  become: false
+  community.general.terraform:
+    project_path: "{{ vault_terraform_dir }}"
+    workspace: "{{ vault_terraform_workspace }}"
+    state: present
+    force_init: true
+    check_destroy: true
+    variables:
+      vault_token: "{{ vault_root_token }}"
+      # Vagrant must port forward 8200 to the host
+      vault_address: "http://{{ vault_server_fqdn }}:8200"
+      admin_password: "{{ vault_admin_password }}"
+      kvuser_password: "{{ vault_kvuser_password }}"
+  register: vault_terraform_output
+  no_log: true
+  delegate_to: localhost
+
+- debug:
+    msg: "{{ vault_terraform_output.stdout }}"
+  when: vault_terraform_output is defined

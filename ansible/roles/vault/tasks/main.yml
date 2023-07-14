@@ -1,0 +1,35 @@
+---
+- name: Create Vault restricted directories
+  file:
+    path: "{{ item }}"
+    mode: 0700
+    owner: vault
+    group: vault
+    state: directory
+  with_items:
+    - "{{ vault_data_dir }}"
+    - "{{ vault_data_dir }}/raft"
+
+- name: Create Vault config directories
+  file:
+    path: "{{ item }}"
+    mode: 0755
+    owner: vault
+    group: vault
+    state: directory
+  with_items:
+    - "{{ vault_config_dir }}"
+
+- name: Create Vault user home directory
+  file:
+    path: "/home/vault"
+    mode: 0755
+    owner: vault
+    group: vault
+    state: directory
+
+- import_tasks: server.yml
+  when: vault_server | bool
+
+- import_tasks: agent.yml
+  when: vault_setup_agent | bool

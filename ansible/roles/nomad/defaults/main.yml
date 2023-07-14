@@ -1,0 +1,6 @@
+---
+nomad_config_dir: "/etc/nomad.d"
+nomad_data_dir: "/opt/nomad/data"
+
+# vault
+setup_vault_integration: false

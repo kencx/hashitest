@@ -1,0 +1,18 @@
+---
+common_keyring_dir: "/etc/apt/keyrings"
+common_packages:
+  - sudo
+  - curl
+  - openssh-server
+  - vim
+  - gnupg
+  - software-properties-common
+  - jq
+  - unzip
+  - ca-certificates
+
+common_nomad_version: "1.5.2-1"
+common_consul_version: "1.15.1-1"
+common_vault_version: "1.14.0-1"
+common_consul_template_version: "0.30.0-1"
+common_reset_nomad: true

@@ -1,0 +1,14 @@
+---
+- name: reload vault
+  systemd:
+    name: vault
+    state: reloaded
+    daemon_reload: true
+  when: not vault_started.changed
+
+- name: reload vault-agent
+  systemd:
+    name: vault-agent
+    state: reloaded
+    daemon_reload: true
+  when: not vault_started.changed

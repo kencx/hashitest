@@ -1,0 +1,20 @@
+---
+- name: restart nomad
+  systemd:
+    name: nomad
+    state: restarted
+    daemon_reload: true
+  when: not nomad_started.changed
+
+- name: reload nomad
+  systemd:
+    name: nomad
+    state: reloaded
+    daemon_reload: true
+  when: not nomad_started.changed
+
+- name: reload consul-template
+  systemd:
+    name: consul-template
+    state: reloaded
+    daemon_reload: true

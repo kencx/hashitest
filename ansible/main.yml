@@ -1,0 +1,22 @@
+---
+- hosts: all
+  become: true
+  roles:
+    - role: common
+      vars:
+        common_reset_nomad: false
+
+    - name: Install Docker
+      role: geerlingguy.docker
+      vars:
+        - docker_install_compose_plugin: true
+        - docker_install_compose: false
+        - docker_users: ["vagrant"]
+
+    - role: vault
+      vars:
+        vault_terraform_reset: false
+    - role: nomad
+      vars:
+        server: true
+        setup_vault_integration: false

@@ -1,0 +1,13 @@
+---
+vault_config_dir: "/etc/vault.d"
+vault_data_dir: "/opt/vault/data"
+vault_root_token: "root"
+vault_server: true
+vault_server_fqdn: "{{ ansible_default_ipv4.address }}"
+
+vault_terraform_workspace: "default"
+vault_terraform_reset: false
+vault_admin_password: "password"
+vault_kvuser_password: "password"
+
+vault_setup_agent: false

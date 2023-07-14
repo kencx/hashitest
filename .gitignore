@@ -5,3 +5,7 @@
 vault/{data,logs}/*
 unseal_key
 root_token
+
+.vagrant
+
+geerlingguy.docker
