@@ -4,7 +4,7 @@ ENV['VAGRANT_DEFAULT_PROVIDER'] = 'libvirt'
 
 Vagrant.configure("2") do |config|
   config.vm.box = "debian/bullseye64"
-  config.vm.hostname = "nomad"
+  config.vm.hostname = "hashitest"
 
   config.nfs.verify_installed = false
   config.vm.synced_folder '.', '/vagrant', disabled: true
