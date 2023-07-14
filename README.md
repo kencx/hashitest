@@ -4,9 +4,9 @@
 
 - Vagrant >= v2.3.6
 - [Vagrant libvirt plugin](https://github.com/vagrant-libvirt/vagrant-libvirt)
-  (0.12.2) (optional)
+  v0.12.2 (optional)
 - Terraform >= v1.5.3
-- Ansible >= 2.15.1 (optional - can use `ansible_local` provisioner instead)
+- Ansible >= v2.15.1 (optional - can use `ansible_local` provisioner instead)
 
 ## Usage
 

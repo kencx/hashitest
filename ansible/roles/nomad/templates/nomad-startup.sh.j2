@@ -1,0 +1,11 @@
+#!/bin/bash
+
+set -euo pipefail
+
+NOMAD_TOKEN="$(VAULT_ADDR={{ nomad_vault_addr }} \
+    VAULT_TOKEN={{ nomad_vault_token }} \
+    vault write -field=token auth/token/create-orphan \
+    "policies=nomad_cluster" \
+    "period=72h")"
+
+VAULT_TOKEN="$NOMAD_TOKEN" /usr/bin/nomad agent -dev -config {{ nomad_config_dir }} &

@@ -4,13 +4,13 @@ Wants=network-online.target
 After=network-online.target
 
 [Service]
-{% if server %}
-User=nomad
-Group=nomad
-{% endif %}
-
 ExecReload=/bin/kill -HUP $MAINPID
-ExecStart=/usr/bin/nomad agent -dev -config /etc/nomad.d
+{% if setup_vault_integration %}
+Type=forking
+ExecStart={{ nomad_data_dir }}/nomad-startup.sh
+{% else %}
+ExecStart=/usr/bin/nomad agent -dev -config {{ nomad_config_dir }}
+{% endif %}
 KillMode=process
 KillSignal=SIGINT
 LimitNOFILE=65536

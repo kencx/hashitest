@@ -1,0 +1,17 @@
+---
+# Nomad perform automatic renewal of the given Vault token in-memory. However, if Nomad
+# is stopped or restarted after the token has expired, Nomad is unable to produce a new
+# token for startup automatically. To solve this, Nomad is started via a custom startup
+# script that generates a new Vault token with the required policies.
+#
+# Because this token generation requires its own token, we opted for a cert auth role
+# with limited permissions. The auth certificates are managed by consul-template,
+# similar to the Vault agent auth role.
+
+- name: Copy Nomad startup script
+  template:
+    src: "nomad-startup.sh.j2"
+    dest: "{{ nomad_data_dir }}/nomad-startup.sh"
+    mode: 0700
+    owner: nomad
+    group: nomad

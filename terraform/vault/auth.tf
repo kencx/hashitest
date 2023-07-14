@@ -42,6 +42,25 @@ resource "vault_generic_endpoint" "kvuser" {
 }
 EOF
 }
+
+data "vault_auth_backend" "token" {
+  path = "token"
+}
+
+resource "vault_token_auth_backend_role" "nomad_cluster" {
+  role_name = "nomad_cluster"
+  allowed_policies = [
+    "whoami"
+  ]
+  disallowed_policies = ["nomad_cluster"]
+
+  # allowed_entity_aliases = ["nomad_token"]
+  token_period           = 259200 # 72h
+  token_explicit_max_ttl = 0
+  orphan                 = true
+  renewable              = true
+}
+
 # identities, entities
 
 resource "vault_identity_entity" "admin" {
