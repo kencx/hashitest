@@ -6,3 +6,14 @@ resource "vault_mount" "kvv2" {
     version = "2"
   }
 }
+
+resource "vault_kv_secret_v2" "whoami" {
+  mount = vault_mount.kvv2.path
+  name  = "nomad/whoami"
+  data_json = jsonencode(
+    {
+      username = "admin",
+      password = "password"
+    }
+  )
+}

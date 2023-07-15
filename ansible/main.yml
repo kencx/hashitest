@@ -6,7 +6,7 @@
   roles:
     - role: common
       vars:
-        common_reset_nomad: false
+        common_reset_nomad: true
 
     - name: Install Docker
       role: geerlingguy.docker
@@ -17,7 +17,7 @@
 
     - role: vault
       vars:
-        vault_terraform_reset: false
+        vault_terraform_reset: true
         vault_root_token: "{{ root_token }}"
     - role: nomad
       vars:

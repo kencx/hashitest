@@ -10,7 +10,7 @@
     - "{{ nomad_config_dir }}"
     - "{{ nomad_data_dir }}"
 
-- name: Add Nomad to docker group
+- name: Add Nomad user to docker group
   user:
     name: nomad
     append: true
@@ -51,7 +51,6 @@
     daemon_reload: true
   register: nomad_started
 
-# Apply all service and config changes
 - name: Restart Nomad if there are changes
   meta: flush_handlers
 

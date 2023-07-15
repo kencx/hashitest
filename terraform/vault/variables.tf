@@ -16,12 +16,6 @@ variable "admin_password" {
   description = "Admin password"
 }
 
-variable "kvuser_password" {
-  type        = string
-  sensitive   = true
-  description = "kvuser password"
-}
-
 variable "allowed_auth_domains" {
   type        = list(string)
   description = "List of allowed_domains for PKI auth role"
