@@ -1,10 +1,14 @@
 #!/bin/bash
-
 set -euo pipefail
 
-NOMAD_TOKEN="$(VAULT_ADDR={{ nomad_vault_addr }} \
-    VAULT_TOKEN={{ nomad_vault_token }} \
-    vault write -field=token auth/token/create-orphan \
+ADDR="{{ nomad_vault_addr }}"
+
+TOKEN="$(vault login --tls-skip-verify --token-only -method=cert \
+    -client-cert={{ nomad_tls_dir }}/nomad_startup.crt \
+    -client-key={{ nomad_tls_dir }}/nomad_startup.pem)"
+
+NOMAD_TOKEN="$(VAULT_ADDR=$ADDR VAULT_TOKEN=$TOKEN \
+    vault write --tls-skip-verify -field=token auth/token/create-orphan \
     "policies=nomad_cluster" \
     "period=72h")"
 

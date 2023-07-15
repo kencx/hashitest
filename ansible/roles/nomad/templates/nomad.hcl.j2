@@ -20,5 +20,6 @@ vault {
   enabled = true
   address = "{{ nomad_vault_addr }}"
   create_from_role = "nomad_cluster"
+  tls_skip_verify = true
 }
 {% endif %}

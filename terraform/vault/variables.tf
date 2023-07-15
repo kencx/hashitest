@@ -10,6 +10,11 @@ variable "vault_token" {
   description = "Vault token for provider"
 }
 
+variable "vagrant_host" {
+  type        = string
+  description = "Vagrant Host IP"
+}
+
 variable "admin_password" {
   type        = string
   sensitive   = true

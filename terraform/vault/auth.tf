@@ -61,6 +61,48 @@ resource "vault_token_auth_backend_role" "nomad_cluster" {
   renewable              = true
 }
 
+resource "vault_pki_secret_backend_cert" "nomad_startup" {
+  depends_on            = [vault_pki_secret_backend_role.auth_role]
+  backend               = vault_mount.pki_int.path
+  name                  = vault_pki_secret_backend_role.auth_role.name
+  common_name           = "nomad-startup@global.vault"
+  ttl                   = "30d"
+  auto_renew            = true
+  min_seconds_remaining = 604800
+
+  provisioner "file" {
+    content     = vault_pki_secret_backend_cert.nomad_startup.certificate
+    destination = "/home/vagrant/tls/nomad_startup.crt"
+
+    connection {
+      type = "ssh"
+      user = "vagrant"
+      host = var.vagrant_host
+    }
+  }
+
+  provisioner "file" {
+    content     = vault_pki_secret_backend_cert.nomad_startup.private_key
+    destination = "/home/vagrant/tls/nomad_startup.pem"
+
+    connection {
+      type = "ssh"
+      user = "vagrant"
+      host = var.vagrant_host
+    }
+  }
+}
+
+resource "vault_cert_auth_backend_role" "nomad_startup" {
+  backend        = vault_auth_backend.cert.path
+  name           = "nomad-startup"
+  display_name   = "nomad-startup"
+  certificate    = vault_pki_secret_backend_cert.nomad_startup.certificate
+  token_ttl      = 2592000
+  token_period   = 2592000
+  token_policies = ["nomad_startup", "nomad_cluster"]
+}
+
 # identities, entities
 
 resource "vault_identity_entity" "admin" {
