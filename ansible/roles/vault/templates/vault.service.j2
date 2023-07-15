@@ -11,7 +11,11 @@ Group=vault
 
 Type=notify
 ExecReload=/bin/kill -HUP $MAINPID
+{% if vault_enable_tls %}
+ExecStart=/usr/bin/vault server -dev-tls -dev-root-token-id={{ vault_root_token }} -config="{{ vault_config_dir }}"
+{% else %}
 ExecStart=/usr/bin/vault server -dev -dev-root-token-id={{ vault_root_token }} -config="{{ vault_config_dir }}"
+{% endif %}
 ExecStop=/usr/bin/vault operator step-down
 KillMode=process
 KillSignal=SIGINT

@@ -16,9 +16,15 @@ The Vagrantfile uses the libvirt provider by default.
 $ vagrant up
 ```
 
+Start Vault with TLS:
+
+```
+$ VAULT_TLS=1 vagrant up
+```
+
 ## Tests
 
-- [ ] Vault Integration in Nomad
+- [x] Vault Integration in Nomad
 - [ ] Nomad TLS configuration (`tls` block)
 - [ ] Vault Agent and consul-template
 - [ ] Nomad, Consul integration and Consul Connect

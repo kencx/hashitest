@@ -32,10 +32,20 @@
     port: 8200
     state: started
 
-- name: Check Vault status
-  command: vault status -format=json
+- name: Check Vault status (HTTP)
+  command: vault status --tls-skip-verify -format=json
   environment:
-    VAULT_ADDR: "http://{{ vault_server_fqdn }}:8200"
+    VAULT_ADDR: "http://localhost:8200"
+  when: not vault_enable_tls | bool
+  register: vault_status_raw
+  changed_when: false
+  failed_when: vault_status_raw.rc == 1
+
+- name: Check Vault status (HTTPS)
+  command: vault status --tls-skip-verify -format=json
+  environment:
+    VAULT_ADDR: "https://localhost:8200"
+  when: vault_enable_tls | bool
   register: vault_status_raw
   changed_when: false
   failed_when: vault_status_raw.rc == 1
@@ -81,7 +91,7 @@
     variables:
       vault_token: "{{ vault_root_token }}"
       # Vagrant must port forward 8200 to the host
-      vault_address: "http://{{ vault_server_fqdn }}:8200"
+      vault_address: "http://localhost:8200"
       admin_password: "{{ vault_admin_password }}"
   register: vault_terraform_output
   no_log: true

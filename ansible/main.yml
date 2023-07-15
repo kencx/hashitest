@@ -1,8 +1,6 @@
 ---
 - hosts: all
   become: true
-  vars:
-    root_token: "root"
   roles:
     - role: common
       vars:
@@ -17,10 +15,12 @@
 
     - role: vault
       vars:
+        vault_enable_tls: "{{ vault_tls }}"
+        vault_root_token: "{{ vault_root_token }}"
         vault_terraform_reset: true
-        vault_root_token: "{{ root_token }}"
+
     - role: nomad
       vars:
         setup_vault_integration: true
-        nomad_vault_addr: "http://localhost:8200"
-        nomad_vault_token: "{{ root_token }}"
+        nomad_vault_addr: "{{ 'https' if vault_tls else 'http' }}://localhost:8200"
+        nomad_vault_token: "{{ vault_root_token }}"
