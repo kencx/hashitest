@@ -1,7 +1,7 @@
 [Unit]
 Description=Nomad
 Wants=network-online.target
-After=network-online.target
+After=network-online.target vault.service
 
 [Service]
 ExecReload=/bin/kill -HUP $MAINPID

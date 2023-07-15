@@ -1,12 +1,13 @@
 ui = true
 
-# storage "raft" {
-#   path    = "{{ vault_data_dir }}"
-#   node_id = "{{ ansible_hostname }}"
-# }
+storage "raft" {
+  path    = "{{ vault_data_dir }}"
+  node_id = "{{ ansible_hostname }}"
+}
 
 listener "tcp" {
-  address = "{{ vault_server_fqdn }}:8200"
+  address = {% raw %}"{{ GetInterfaceIP \"eth0\" }}:8200"
+{% endraw %}
   tls_disable = true
 }
 
@@ -16,5 +17,7 @@ listener "tcp" {
   tls_disable = true
 }
 
-api_addr = {% raw %}"https://{{ GetInterfaceIP \"eth1\" }}:8200"
+api_addr = {% raw %}"http://{{ GetInterfaceIP \"eth1\" }}:8200"
+{% endraw %}
+cluster_addr = {% raw %}"http://{{ GetInterfaceIP \"eth1\" }}:8201"
 {% endraw %}
