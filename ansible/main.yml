@@ -19,8 +19,5 @@
         vault_root_token: "{{ vault_root_token }}"
         vault_terraform_reset: true
 
+    - role: consul
     - role: nomad
-      vars:
-        setup_vault_integration: true
-        nomad_vault_addr: "{{ 'https' if vault_tls else 'http' }}://localhost:8200"
-        nomad_vault_token: "{{ vault_root_token }}"

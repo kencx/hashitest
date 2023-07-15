@@ -1,0 +1,48 @@
+---
+- name: Create Consul directories
+  file:
+    path: "{{ item }}"
+    mode: 0755
+    owner: consul
+    group: consul
+    state: directory
+  with_items:
+    - "{{ consul_config_dir }}"
+    - "{{ consul_data_dir }}"
+
+- name: Copy service file
+  become: true
+  template:
+    src: "consul.service.j2"
+    dest: "/etc/systemd/system/consul.service"
+    mode: 0644
+    owner: root
+    group: root
+  notify: restart consul
+
+- name: Copy Consul config files
+  template:
+    src: "consul.hcl.j2"
+    dest: "{{ consul_config_dir }}/consul.hcl"
+    mode: 0644
+    owner: consul
+    group: consul
+  notify:
+    - reload consul
+
+- name: Start Consul
+  become: true
+  systemd:
+    name: consul
+    state: started
+    enabled: true
+    daemon_reload: true
+  register: consul_started
+
+- name: Run handlers now
+  meta: flush_handlers
+
+- name: Wait for Consul port
+  wait_for:
+    port: 8500
+    state: started

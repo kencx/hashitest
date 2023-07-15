@@ -1,0 +1,21 @@
+datacenter  = "dc1"
+data_dir    = "{{ consul_data_dir }}"
+bind_addr   = {% raw %}"{{ GetInterfaceIP \"eth0\" }}"
+{% endraw %}
+client_addr = "0.0.0.0"
+
+server      = true
+bootstrap   = true
+
+ports {
+  http     = 8500
+  grpc     = 8502
+}
+
+connect {
+  enabled = true
+}
+
+ui_config {
+  enabled = true
+}
