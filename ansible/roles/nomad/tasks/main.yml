@@ -58,3 +58,30 @@
   wait_for:
     port: 4646
     state: started
+
+# See terraform/nomad for resources
+# Note that Terraform must be installed on Ansible host
+- set_fact:
+    nomad_terraform_dir: "{{ lookup('pipe', 'git rev-parse --show-toplevel') }}/terraform/nomad"
+
+- name: Delete existing state from Terraform if any
+  become: false
+  community.general.terraform:
+    project_path: "{{ nomad_terraform_dir }}"
+    state: absent
+  delegate_to: localhost
+  when: nomad_terraform_reset | bool
+
+- name: Run Nomad jobs with Terraform provider
+  become: false
+  community.general.terraform:
+    project_path: "{{ nomad_terraform_dir }}"
+    state: present
+    force_init: true
+    check_destroy: true
+  register: nomad_terraform_output
+  delegate_to: localhost
+
+- debug:
+    msg: "{{ nomad_terraform_output.stdout }}"
+  when: nomad_terraform_output is defined

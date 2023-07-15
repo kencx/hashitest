@@ -6,3 +6,5 @@ nomad_data_dir: "/opt/nomad/data"
 setup_vault_integration: false
 nomad_vault_token: "root"
 nomad_vault_addr: "http://localhost:8200"
+
+nomad_terraform_reset: false

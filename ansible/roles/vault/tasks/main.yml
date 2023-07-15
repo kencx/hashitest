@@ -31,5 +31,5 @@
 - import_tasks: server.yml
   when: vault_server | bool
 
-- import_tasks: agent.yml
-  when: vault_setup_agent | bool
+# - import_tasks: agent.yml
+#   when: vault_setup_agent | bool
