@@ -25,7 +25,7 @@ $ VAULT_TLS=1 vagrant up
 ## Tests
 
 - [x] Vault Integration in Nomad
+- [x] Nomad, Consul integration and Consul Connect
 - [ ] Nomad TLS configuration (`tls` block)
 - [ ] Vault Agent and consul-template
-- [ ] Nomad, Consul integration and Consul Connect
 - [ ] Vault Agent's new process supervisor mode
