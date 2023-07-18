@@ -10,6 +10,7 @@ common_packages:
   - jq
   - unzip
   - ca-certificates
+  - dnsmasq
 
 common_nomad_version: "1.5.2-1"
 common_consul_version: "1.15.1-1"

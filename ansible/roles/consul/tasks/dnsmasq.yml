@@ -1,0 +1,43 @@
+---
+- name: Stop and disable systemd-resolved
+  systemd:
+    name: systemd-resolved
+    state: stopped
+    enabled: false
+
+- name: Ensure resolvconf is not installed
+  apt:
+    name: resolvconf
+    state: absent
+
+- name: Install dnsmasq
+  apt:
+    name: dnsmasq
+    state: present
+
+- name: Copy dnsmasq.conf
+  template:
+    src: dnsmasq.conf.j2
+    dest: /etc/dnsmasq.conf
+    mode: 0644
+    owner: root
+    group: root
+  notify: restart dnsmasq
+
+- name: Add localhost DNS server to dhclient.conf
+  lineinfile:
+    path: /etc/dhcp/dhclient.conf
+    line: prepend domain-name-servers 127.0.0.1;
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Start dnsmasq
+  systemd:
+    name: dnsmasq
+    state: started
+    enabled: true
+    daemon_reload: true
+
+- name: Restart system
+  reboot:

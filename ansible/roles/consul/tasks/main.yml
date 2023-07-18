@@ -1,4 +1,6 @@
 ---
+- import_tasks: dnsmasq.yml
+
 - name: Create Consul directories
   file:
     path: "{{ item }}"
