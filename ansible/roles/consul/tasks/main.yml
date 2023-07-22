@@ -11,6 +11,12 @@
   with_items:
     - "{{ consul_config_dir }}"
     - "{{ consul_data_dir }}"
+    - "{{ consul_tls_dir }}"
+
+- name: Create Consul TLS certs
+  become: true
+  import_tasks: tls.yml
+  when: consul_enable_tls
 
 - name: Copy service file
   become: true

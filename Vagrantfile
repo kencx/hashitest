@@ -17,6 +17,8 @@ Vagrant.configure("2") do |config|
   vault_tls = ["true", "1"].include?((ENV['VAULT_TLS'] || false).to_s.downcase)
   vault_root_token = ENV["VAULT_ROOT_TOKEN"] || "root"
 
+  consul_tls = ["true", "1"].include?((ENV['CONSUL_TLS'] || false).to_s.downcase)
+
   config.vm.provision "ansible" do |ansible|
     ansible.playbook = "ansible/main.yml"
     ansible.galaxy_role_file = "ansible/requirements.yml"
@@ -24,6 +26,7 @@ Vagrant.configure("2") do |config|
     ansible.extra_vars = {
       vault_tls: vault_tls,
       vault_root_token: vault_root_token,
+      consul_tls: consul_tls,
     }
   end
 end

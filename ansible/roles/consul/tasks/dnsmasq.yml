@@ -38,6 +38,4 @@
     state: started
     enabled: true
     daemon_reload: true
-
-- name: Restart system
-  reboot:
+  notify: restart system

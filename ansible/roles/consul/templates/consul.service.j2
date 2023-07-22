@@ -13,7 +13,8 @@ ExecStop=/usr/bin/consul leave
 KillMode=process
 KillSignal=SIGINT
 Restart=on-failure
-RestartSec=2
+RestartSec=10
+LimitNOFILE=65536
 
 [Install]
 WantedBy=multi-user.target

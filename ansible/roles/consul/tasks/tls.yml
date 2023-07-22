@@ -1,0 +1,20 @@
+---
+- name: Create Consul CA key pair
+  command:
+    cmd: consul tls ca create
+    chdir: "{{ consul_tls_dir }}"
+    creates: "{{ consul_tls_dir }}/consul-agent-ca*"
+
+- name: Create Consul server key pair
+  command:
+    cmd: consul tls cert create -server
+    chdir: "{{ consul_tls_dir }}"
+    creates: "{{ consul_tls_dir }}/dc1-server-consul-0*"
+
+- name: Set owner and group to Consul
+  file:
+    dest: "{{ consul_tls_dir }}"
+    owner: consul
+    group: consul
+    mode: u=rwX,g=rX,o=rX
+    recurse: true

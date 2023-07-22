@@ -20,6 +20,10 @@
         vault_terraform_reset: true
 
     - role: consul
+      vars:
+        # consul_enable_tls: "{{ consul_tls }}"
+        consul_enable_tls: true
+
     - role: nomad
       vars:
         setup_vault_integration: false
