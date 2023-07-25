@@ -24,6 +24,16 @@ tls {
     verify_outgoing = true
   }
 
+  # workaround for envoy mTLS error
+  grpc {
+    verify_incoming = false
+  }
+
+  # disable mTLS for https connections
+  https {
+    verify_incoming = false
+  }
+
   internal_rpc {
     verify_server_hostname = true
   }

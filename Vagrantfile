@@ -6,12 +6,18 @@ Vagrant.configure("2") do |config|
   config.vm.box = "debian/bullseye64"
   config.vm.hostname = "hashitest"
 
+  config.vm.provider "libvirt" do |libvirt|
+    libvirt.cpus = 2
+    libvirt.memory = 1024
+  end
+
   config.nfs.verify_installed = false
   config.vm.synced_folder '.', '/vagrant', disabled: true
 
   config.vm.network "forwarded_port", guest: 4646, host:4646
   config.vm.network "forwarded_port", guest: 8200, host:8200
   config.vm.network "forwarded_port", guest: 8500, host:8500
+  config.vm.network "forwarded_port", guest: 8501, host:8501
   config.vm.network "private_network", ip: "10.0.0.2"
 
   vault_tls = ["true", "1"].include?((ENV['VAULT_TLS'] || false).to_s.downcase)

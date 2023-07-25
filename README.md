@@ -29,3 +29,5 @@ $ VAULT_TLS=1 vagrant up
 - [ ] Nomad TLS configuration (`tls` block)
 - [ ] Vault Agent and consul-template
 - [ ] Vault Agent's new process supervisor mode
+- [ ] Consul signal termination and cluster leaving
+- [ ] Vault as Consul Connect CA provider

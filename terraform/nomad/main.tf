@@ -11,10 +11,14 @@ provider "nomad" {
   address = "http://localhost:4646"
 }
 
-# resource "nomad_job" "whoami" {
-#   jobspec = file("${path.module}/whoami.nomad.hcl")
-# }
+resource "nomad_job" "whoami" {
+  jobspec = file("${path.module}/whoami.nomad.hcl")
+}
 
 resource "nomad_job" "countdash" {
   jobspec = file("${path.module}/countdash.nomad.hcl")
+}
+
+resource "nomad_job" "paperless" {
+  jobspec = file("${path.module}/paperless.nomad.hcl")
 }
