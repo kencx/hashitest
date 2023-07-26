@@ -50,7 +50,8 @@ data "vault_auth_backend" "token" {
 resource "vault_token_auth_backend_role" "nomad_cluster" {
   role_name = "nomad_cluster"
   allowed_policies = [
-    "whoami"
+    "whoami",
+    "miniflux"
   ]
   disallowed_policies = ["nomad_cluster"]
 
@@ -78,4 +79,3 @@ resource "vault_identity_entity_alias" "admin_token" {
   canonical_id   = vault_identity_entity.admin.id
   mount_accessor = data.vault_auth_backend.token.accessor
 }
-

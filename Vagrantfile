@@ -17,7 +17,7 @@ Vagrant.configure("2") do |config|
   config.vm.network "forwarded_port", guest: 4646, host:4646
   config.vm.network "forwarded_port", guest: 8200, host:8200
   config.vm.network "forwarded_port", guest: 8500, host:8500
-  config.vm.network "forwarded_port", guest: 8501, host:8501
+  config.vm.network "forwarded_port", guest: 5432, host:5432
   config.vm.network "private_network", ip: "10.0.0.2"
 
   vault_tls = ["true", "1"].include?((ENV['VAULT_TLS'] || false).to_s.downcase)
