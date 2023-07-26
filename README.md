@@ -12,15 +12,18 @@
 
 The Vagrantfile uses the libvirt provider by default.
 
-```
-$ vagrant up
-```
-
 Start Vault with TLS:
 
 ```
 $ VAULT_TLS=1 vagrant up
 ```
+
+Start Consul with TLS:
+
+```
+$ CONSUL_TLS=1 vagrant up
+```
+
 
 ## Tests
 
