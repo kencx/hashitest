@@ -18,14 +18,17 @@
         vault_enable_tls: "{{ vault_tls }}"
         vault_root_token: "{{ vault_root_token }}"
         vault_terraform_reset: true
+      tags: ["vault"]
 
     - role: consul
       vars:
         # consul_enable_tls: "{{ consul_tls }}"
         consul_enable_tls: true
+      tags: ["consul"]
 
     - role: nomad
       vars:
         setup_vault_integration: false
         nomad_vault_token: "{{ vault_root_token }}"
         nomad_vault_addr: "{{ 'https' if vault_tls else 'http' }}://localhost:8200"
+      tags: ["nomad"]

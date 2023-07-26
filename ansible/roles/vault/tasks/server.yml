@@ -32,20 +32,10 @@
     port: 8200
     state: started
 
-- name: Check Vault status (HTTP)
+- name: Check Vault status
   command: vault status --tls-skip-verify -format=json
   environment:
-    VAULT_ADDR: "http://localhost:8200"
-  when: not vault_enable_tls | bool
-  register: vault_status_raw
-  changed_when: false
-  failed_when: vault_status_raw.rc == 1
-
-- name: Check Vault status (HTTPS)
-  command: vault status --tls-skip-verify -format=json
-  environment:
-    VAULT_ADDR: "https://localhost:8200"
-  when: vault_enable_tls | bool
+    VAULT_ADDR: "{{ 'https' if vault_tls else 'http' }}://localhost:8200"
   register: vault_status_raw
   changed_when: false
   failed_when: vault_status_raw.rc == 1

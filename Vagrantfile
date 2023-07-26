@@ -24,6 +24,9 @@ Vagrant.configure("2") do |config|
   vault_root_token = ENV["VAULT_ROOT_TOKEN"] || "root"
 
   consul_tls = ["true", "1"].include?((ENV['CONSUL_TLS'] || false).to_s.downcase)
+  if consul_tls
+    config.vm.network "forwarded_port", guest: 8501, host:8501
+  end
 
   config.vm.provision "ansible" do |ansible|
     ansible.playbook = "ansible/main.yml"
