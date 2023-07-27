@@ -15,7 +15,7 @@ Vagrant.configure("2") do |config|
   config.vm.synced_folder '.', '/vagrant', disabled: true
 
   config.vm.network "private_network", ip: "10.0.0.2"
-  ansible_tags = []
+  ansible_tags = ["untagged"]
 
   # common
   common_reset_nomad = true
