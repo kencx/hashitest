@@ -40,3 +40,15 @@ variable "postgres_port" {
   description = "Postgres port"
   default     = "5432"
 }
+
+variable "roles" {
+  type = list(object({
+    name            = string
+    rotation_period = optional(number, 86400)
+  }))
+  description = "List of roles with name and rotation period in sec (default 86400s)."
+  validation {
+    condition     = alltrue([for r in var.roles : r.rotation_period > 0])
+    error_message = "Rotation period cannot be <= 0"
+  }
+}

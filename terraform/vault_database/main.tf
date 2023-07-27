@@ -27,6 +27,10 @@ provider "vault" {
 
 locals {
   connection_url = "postgres://${var.postgres_username}:${var.postgres_password}@${var.postgres_host}:${var.postgres_port}/${var.postgres_database}"
+
+  roles = {
+    for role in var.roles : role.name => role.rotation_period
+  }
 }
 
 
@@ -48,11 +52,8 @@ resource "vault_database_secret_backend_connection" "postgres" {
 # NOTE: Remember to add the created policy to
 # vault_token_auth_backend_role.nomad_cluster
 module "miniflux" {
-  source = "../modules/database"
-  for_each = {
-    miniflux = 86400
-    foo      = 86400
-  }
+  source   = "../modules/database"
+  for_each = local.roles
 
   postgres_vault_backend = vault_mount.db.path
   postgres_db_name       = vault_database_secret_backend_connection.postgres.name
