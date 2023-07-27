@@ -1,12 +1,12 @@
-variable "postgres_connection_url" {
-  type        = string
-  description = "Postgres connection URL"
-  default     = "postgres://postgres:postgres@localhost:5432/postgres"
-}
-
 variable "postgres_vault_backend" {
   type        = string
-  description = "Database secrets engine backend for Postgres"
+  description = "Mount for Postgres database secrets engine."
+  default     = "postgres"
+}
+
+variable "postgres_db_name" {
+  type        = string
+  description = "Unique name of Postgres database connection to use for static role."
   default     = "postgres"
 }
 

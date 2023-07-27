@@ -35,26 +35,29 @@ resource "vault_mount" "db" {
   type = "database"
 }
 
+resource "vault_database_secret_backend_connection" "postgres" {
+  backend       = vault_mount.db.path
+  name          = "postgres"
+  allowed_roles = ["*"]
+
+  postgresql {
+    connection_url = local.connection_url
+  }
+}
+
 # NOTE: Remember to add the created policy to
 # vault_token_auth_backend_role.nomad_cluster
 module "miniflux" {
   source = "../modules/database"
+  for_each = {
+    miniflux = 86400
+    foo      = 86400
+  }
 
-  postgres_vault_backend  = vault_mount.db.path
-  postgres_connection_url = local.connection_url
+  postgres_vault_backend = vault_mount.db.path
+  postgres_db_name       = vault_database_secret_backend_connection.postgres.name
 
-  postgres_role_name                   = "miniflux"
-  postgres_role_password               = "miniflux"
-  postgres_static_role_rotation_period = 86400
-}
-
-module "foo" {
-  source = "../modules/database"
-
-  postgres_vault_backend  = vault_mount.db.path
-  postgres_connection_url = local.connection_url
-
-  postgres_role_name                   = "foo"
-  postgres_role_password               = "foo"
-  postgres_static_role_rotation_period = 3600
+  postgres_role_name                   = each.key
+  postgres_role_password               = each.key
+  postgres_static_role_rotation_period = each.value
 }

@@ -24,21 +24,11 @@ resource "postgresql_database" "database" {
   depends_on = [postgresql_role.role]
 }
 
-resource "vault_database_secret_backend_connection" "postgres" {
-  backend       = var.postgres_vault_backend
-  name          = "postgres"
-  allowed_roles = ["*"]
-
-  postgresql {
-    connection_url = var.postgres_connection_url
-  }
-}
-
 resource "vault_database_secret_backend_static_role" "static_role" {
   backend  = var.postgres_vault_backend
   name     = var.postgres_role_name
   username = var.postgres_role_name
-  db_name  = vault_database_secret_backend_connection.postgres.name
+  db_name  = var.postgres_db_name
 
   rotation_period = var.postgres_static_role_rotation_period
   rotation_statements = [
