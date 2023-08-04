@@ -12,4 +12,5 @@ vault_terraform_workspace: "default"
 vault_terraform_reset: false
 vault_admin_password: "password"
 
+vault_consul_register: true
 vault_setup_agent: false

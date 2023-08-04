@@ -9,9 +9,17 @@ bootstrap   = true
 
 ports {
   http     = 8500
-  https    = 8501
   grpc     = 8502
+{% if consul_enable_tls %}
+  https    = 8501
   grpc_tls = 8503
+{% endif %}
+}
+
+{% if consul_enable_tls %}
+# bind http port to localhost only
+addresses {
+  http = "127.0.0.1"
 }
 
 tls {
@@ -42,6 +50,7 @@ tls {
 auto_encrypt {
   allow_tls = true
 }
+{% endif %}
 
 connect {
   enabled = true

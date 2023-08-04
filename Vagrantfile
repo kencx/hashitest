@@ -31,6 +31,10 @@ Vagrant.configure("2") do |config|
     vault_root_token = ENV["VAULT_ROOT_TOKEN"] || "root"
     vault_terraform_reset = true
 
+    if !consul_install
+      vault_consul_register = false
+    end
+
     ansible_tags.concat(["vault"])
   end
 

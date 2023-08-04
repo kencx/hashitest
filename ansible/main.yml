@@ -15,6 +15,7 @@
       vars:
         vault_enable_tls: "{{ vault_tls }}"
         vault_root_token: "{{ vault_root_token }}"
+        vault_consul_register: "{{ vault_consul_register }}"
       tags: ["vault"]
 
     - role: consul

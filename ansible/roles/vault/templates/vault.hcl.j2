@@ -21,3 +21,9 @@ api_addr = {% raw %}"http://{{ GetInterfaceIP \"eth1\" }}:8200"
 {% endraw %}
 cluster_addr = {% raw %}"http://{{ GetInterfaceIP \"eth1\" }}:8201"
 {% endraw %}
+
+{% if vault_consul_register %}
+service_registration "consul" {
+  address = "127.0.0.1:8500"
+}
+{% endif %}

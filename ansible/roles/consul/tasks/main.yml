@@ -54,3 +54,9 @@
   wait_for:
     port: 8500
     state: started
+
+- name: Wait for Consul HTTPS port
+  wait_for:
+    port: 8501
+    state: started
+  when: consul_enable_tls
