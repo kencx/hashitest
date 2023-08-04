@@ -24,6 +24,8 @@ Vagrant.configure("2") do |config|
   consul_install = true
   nomad_install = true
 
+  consul_register = true
+
   if vault_install
     config.vm.network "forwarded_port", guest: 8200, host:8200
 
@@ -32,7 +34,7 @@ Vagrant.configure("2") do |config|
     vault_terraform_reset = true
 
     if !consul_install
-      vault_consul_register = false
+      consul_register = false
     end
 
     ansible_tags.concat(["vault"])
@@ -58,6 +60,10 @@ Vagrant.configure("2") do |config|
       nomad_vault_integration = false
     end
 
+    if !consul_tls
+      consul_register = false
+    end
+
     ansible_tags.concat(["nomad"])
   end
 
@@ -77,6 +83,7 @@ Vagrant.configure("2") do |config|
 
       # consul
       consul_tls: consul_tls,
+      consul_register: consul_register,
 
       # nomad
       setup_vault_integration: nomad_vault_integration,

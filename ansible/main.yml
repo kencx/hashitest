@@ -15,7 +15,7 @@
       vars:
         vault_enable_tls: "{{ vault_tls }}"
         vault_root_token: "{{ vault_root_token }}"
-        vault_consul_register: "{{ vault_consul_register }}"
+        vault_consul_register: "{{ consul_register }}"
       tags: ["vault"]
 
     - role: consul
@@ -27,4 +27,5 @@
       vars:
         nomad_vault_token: "{{ vault_root_token }}"
         nomad_vault_addr: "{{ 'https' if vault_tls else 'http' }}://localhost:8200"
+        nomad_consul_register: "{{ consul_register }}"
       tags: ["nomad"]

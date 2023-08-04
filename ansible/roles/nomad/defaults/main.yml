@@ -7,4 +7,6 @@ setup_vault_integration: false
 nomad_vault_token: "root"
 nomad_vault_addr: "http://localhost:8200"
 
+nomad_consul_register: true
+
 nomad_terraform_reset: false
