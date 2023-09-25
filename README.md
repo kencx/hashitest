@@ -34,5 +34,6 @@ $ CONSUL_TLS=1 vagrant up
 - [ ] Vault Agent and consul-template
 - [ ] Vault Agent's new process supervisor mode
 - [ ] Consul signal termination and cluster leaving
+- [ ] Nomad client signal termination, cluster leaving and systemd killMode
 - [ ] Vault as Consul Connect CA provider
 - [ ] Consul client auto-encrypt
